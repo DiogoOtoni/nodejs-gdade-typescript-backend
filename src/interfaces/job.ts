@@ -1,5 +1,4 @@
 
-
 export default interface IJob{
     // id_job?: number,
     jobName: string,
@@ -8,6 +7,6 @@ export default interface IJob{
     link: string,
     empAnun: string,
     linkAnun: string,
-    // diaAplicacao?: string,
-    // horaAplicacao?: string
+    data: string,
+    hora: string
 }

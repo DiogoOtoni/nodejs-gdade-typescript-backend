@@ -1,10 +1,12 @@
 [
     {
-		"jobName": "nameJob",
-		"descricao": "descJob",
-		"empresa": "empresaJob",
-		"link": "linkJob",
-		"empAnun": "empAnunJob",
-		"linkAnun": "linkAnunJob"
-	}
+        "jobName": "Nome da Vaga",
+        "descricao": "Descrição da vaga",
+        "empresa": "Empresa",
+        "link": "Link da empresa",
+        "empAnun": "Empresa anunciante",
+        "linkAnun": "Link do anuncio",
+        "data": "data da aplicação",
+        "hora": "hora da aplicação"
+    }
 ]
