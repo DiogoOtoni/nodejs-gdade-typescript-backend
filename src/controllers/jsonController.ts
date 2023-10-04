@@ -19,8 +19,10 @@ export function registerJob(request:Request, response: Response) {
     const arquivoJSON = fs.readFileSync(URLARQUIVOJSON, 'utf-8');
     const conteudoJSON:IJob[] = JSON.parse(arquivoJSON);
 
+    const id_job: number = conteudoJSON.length + 1; //id AUTOINCREMENT =D
 
-    conteudoJSON.push(dados);
+    conteudoJSON.push({id_job, ...dados});
+
     fs.writeFileSync(URLARQUIVOJSON, JSON.stringify(conteudoJSON, null, 4));
 
     response.status(200).send({message: "Cadastrado!"});
@@ -28,10 +30,8 @@ export function registerJob(request:Request, response: Response) {
 
 export function searchJobs(request: Request, response: Response){
 
- 
     const {typeSearch, dataSearch} = request.query;
  
-    
     const arquivoJSON = fs.readFileSync(URLARQUIVOJSON, 'utf-8');
     const conteudoJSON:IJob[] = JSON.parse(arquivoJSON);
 

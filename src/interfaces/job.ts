@@ -1,6 +1,6 @@
 
 export default interface IJob{
-    // id_job?: number,
+    id_job?: number,
     jobName: string,
     descricao: string,
     empresa: string,
