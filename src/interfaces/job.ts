@@ -8,5 +8,12 @@ export default interface IJob{
     empAnun: string,
     linkAnun: string,
     data: string,
-    hora: string
+    hora: string,
+
+    activeStatus?: boolean,
+
+    statusDescription?: string[],
+    lastUpdatedDay?: string,
+    lastUpdatedTime?: string,
+
 }
