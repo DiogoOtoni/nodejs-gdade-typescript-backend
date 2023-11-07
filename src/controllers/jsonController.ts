@@ -1,63 +1,60 @@
 import { Request, Response } from "express";
-import fs from "fs"
-import IJob from "../interfaces/job";
+import {
+    alteraJob, 
+    alteraStatusDescript, 
+    createJob, 
+    deleteById, 
+    findAll, 
+    findById, 
+    findBySearch
+} from "../services/jsonService"
 
-const URLARQUIVOJSON = "src/database/db.json";
-
+/**
+ * Retorna todos os "jobs"
+ * @param request sem request
+ * @param response statusCode and data - array of objects of type iJob[]
+ */
 export function findAllJobs(request:Request, response: Response) {
-
-    const arquivoJSON = fs.readFileSync(URLARQUIVOJSON, 'utf-8');
-    
-    response.status(200).send(arquivoJSON);
+    const retorno = findAll();
+    response.status(200).send(retorno);
 }
 
 
 export function registerJob(request:Request, response: Response) {
-    
     const dados = request.body;
-    
-    const arquivoJSON = fs.readFileSync(URLARQUIVOJSON, 'utf-8');
-    const conteudoJSON:IJob[] = JSON.parse(arquivoJSON);
-
-    const id_job: number = conteudoJSON.length + 1; //id AUTOINCREMENT =D
-
-    conteudoJSON.push({id_job, ...dados});
-
-    fs.writeFileSync(URLARQUIVOJSON, JSON.stringify(conteudoJSON, null, 4));
-
+    const retorno = createJob(dados);
     response.status(200).send({message: "Cadastrado!"});
 }
 
 export function searchJobs(request: Request, response: Response){
+    const { typeSearch, dataSearch } = request.query;
+    const retorno = findBySearch(String(typeSearch), String(dataSearch));
+    response.status(200).send(retorno);
+}
 
-    const {typeSearch, dataSearch} = request.query;
- 
-    const arquivoJSON = fs.readFileSync(URLARQUIVOJSON, 'utf-8');
-    const conteudoJSON:IJob[] = JSON.parse(arquivoJSON);
+export function findJobById(request: Request, response: Response){
+    const { id } = request.params;
+    const retorno = findById(Number(id));
+    response.status(200).send(retorno);
+}
 
-    const tipoDeBusca = String(typeSearch);
-    const valorDeBusca = String(dataSearch);
+export function deleteMoveToInactive(request: Request, response: Response){
+    const { id } = request.params;
+    const retorno = deleteById(Number(id));
+    response.status(200).send(retorno);
+}
 
-    const regex = new RegExp(valorDeBusca, "ig");
+export function alteraStatusDescription(request: Request, response: Response){
+    const { id } = request.params;
+    const { adicionalDescription } = request.body;
 
-    const result = conteudoJSON.filter((item) => {
-        if(tipoDeBusca == 'jobName'){
-            const myString = item.jobName;
-            return myString.match(regex);
-        }
-        if(tipoDeBusca == 'descricao'){
-            const myString = item.descricao;
-            return myString.match(regex);
-        }
-        if(tipoDeBusca == 'empresa'){
-            const myString = item.empresa;
-            return myString.match(regex);
-        }
-        if(tipoDeBusca == 'empAnun'){
-            const myString = item.empAnun;
-            return myString.match(regex);
-        }
-        
-    })
-    response.status(200).send(result)
+    const retorno = alteraStatusDescript(Number(id), adicionalDescription);
+    response.status(200).send(retorno);
+}
+
+export function alteraCompleteJob(request: Request, response: Response){
+    const { id } = request.params;
+    const data = request.body;
+
+    const retorno = alteraJob(Number(id), data);
 }
