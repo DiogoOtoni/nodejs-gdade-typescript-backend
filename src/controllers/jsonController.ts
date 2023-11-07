@@ -57,4 +57,6 @@ export function alteraCompleteJob(request: Request, response: Response){
     const data = request.body;
 
     const retorno = alteraJob(Number(id), data);
+
+    response.status(200).send(retorno);
 }

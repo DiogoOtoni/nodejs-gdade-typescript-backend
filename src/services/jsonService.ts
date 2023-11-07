@@ -15,8 +15,8 @@ function writingInJson(conteudoJSON:IJob[]){
 
 function attAlterDateTime(id: number, conteudoJSON:IJob[]){
     const indexId = conteudoJSON.findIndex((item) => item.id_job == id );
-    const dataEHora = new Date();
 
+    const dataEHora = new Date();
     conteudoJSON[indexId].lastUpdatedDay = dataEHora.toLocaleDateString();
     conteudoJSON[indexId].lastUpdatedTime = dataEHora.toLocaleTimeString();
 
@@ -29,7 +29,11 @@ export function createJob(dados: IJob){
     const id_job: number = conteudoJSON.length + 1; //id AUTOINCREMENT =D
     conteudoJSON.push({id_job, ...dados});
 
-    writingInJson(conteudoJSON);
+    attAlterDateTime(id_job, conteudoJSON);
+
+    // writingInJson(conteudoJSON);
+
+    //FAZER COLOCAR DATA E HORA NO FRONT END PARA NO BACKEND APENAS ADICIONAR O ATTALTERDATETIME
 
     return true;
 }
@@ -58,7 +62,7 @@ export function deleteById(id: number){
         return "Elemento não encontrado!";
     }
 
-    writingInJson(conteudoJSON);
+    attAlterDateTime(id, conteudoJSON);
     return "Elemento alterado para inativo";
 }
 
@@ -115,7 +119,7 @@ export function alteraJob(id: number, dados: IJob){
     
     //MUDAR O ALTERA STATUS DESCRIPTION ??
 
-
+    attAlterDateTime(id, conteudoJSON);
 
     return true;
 }
