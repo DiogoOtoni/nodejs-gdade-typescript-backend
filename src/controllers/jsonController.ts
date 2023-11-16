@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import {
     alteraJob, 
-    alteraStatusDescript, 
     createJob, 
     deleteById, 
     findAll, 
@@ -41,14 +40,6 @@ export function findJobById(request: Request, response: Response){
 export function deleteMoveToInactive(request: Request, response: Response){
     const { id } = request.params;
     const retorno = deleteById(Number(id));
-    response.status(200).send(retorno);
-}
-
-export function alteraStatusDescription(request: Request, response: Response){
-    const { id } = request.params;
-    const { adicionalDescription } = request.body;
-
-    const retorno = alteraStatusDescript(Number(id), adicionalDescription);
     response.status(200).send(retorno);
 }
 

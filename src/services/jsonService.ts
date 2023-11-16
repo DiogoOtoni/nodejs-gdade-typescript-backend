@@ -27,13 +27,11 @@ export function createJob(dados: IJob){
     const conteudoJSON = readingJson();
 
     const id_job: number = conteudoJSON.length + 1; //id AUTOINCREMENT =D
+    dados.activeStatus = true;
+    
     conteudoJSON.push({id_job, ...dados});
 
     attAlterDateTime(id_job, conteudoJSON);
-
-    // writingInJson(conteudoJSON);
-
-    //FAZER COLOCAR DATA E HORA NO FRONT END PARA NO BACKEND APENAS ADICIONAR O ATTALTERDATETIME
 
     return true;
 }
@@ -90,36 +88,34 @@ export function findBySearch(tipoDeBusca: string, valorDeBusca:string){
     })
 }
 
-export function alteraStatusDescript(id: number, adicionalDescription:string){
-    const conteudoJSON = readingJson();
-    const indexId = conteudoJSON.findIndex((item) => item.id_job == id );
-
-    if(indexId != -1){
-        conteudoJSON[indexId].statusDescription?.push(adicionalDescription);
-    }else{
-        return "elemento não encontrado";
-    }
-
-    attAlterDateTime(id, conteudoJSON);
-
-    return "ok !!";
-}
-
 export function alteraJob(id: number, dados: IJob){
-    const conteudoJSON = readingJson();
+    try{
+        const conteudoJSON = readingJson();
 
-    const indexId = conteudoJSON.findIndex((item) => item.id_job == id);
+        if(conteudoJSON == null || conteudoJSON == undefined){
+            throw "arquivo vazio";
+        }
 
-    conteudoJSON[indexId].jobName = dados.jobName;
-    conteudoJSON[indexId].descricao = dados.descricao;
-    conteudoJSON[indexId].empresa = dados.empresa;
-    conteudoJSON[indexId].link = dados.link;
-    conteudoJSON[indexId].empAnun = dados.empAnun;
-    conteudoJSON[indexId].linkAnun = dados.linkAnun;
+        const indexId = conteudoJSON.findIndex((item) => item.id_job == id);
+
+        if(indexId == -1){
+            throw "índice não existente"
+        }
+
+        conteudoJSON[indexId].jobName = dados.jobName;
+        conteudoJSON[indexId].descricao = dados.descricao;
+        conteudoJSON[indexId].empresa = dados.empresa;
+        conteudoJSON[indexId].link = dados.link;
+        conteudoJSON[indexId].empAnun = dados.empAnun;
+        conteudoJSON[indexId].linkAnun = dados.linkAnun;
+        conteudoJSON[indexId].statusDescription = dados.statusDescription;
+
+        attAlterDateTime(id, conteudoJSON);
+
+    }catch(error){
+
+    }
     
-    //MUDAR O ALTERA STATUS DESCRIPTION ??
-
-    attAlterDateTime(id, conteudoJSON);
 
     return true;
 }
