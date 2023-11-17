@@ -3,16 +3,29 @@ import IJob from "../interfaces/job";
 
 const URLARQUIVOJSON = "src/database/db.json";
 
+/**
+ * Função que lê o arquivo json como "banco de dados" e retorna como um vetor de objetos do tipo IJob
+ * @returns Objeto do arquivo json, type IJob[]
+ */
 function readingJson(){
     const arquivoJSON = fs.readFileSync(URLARQUIVOJSON, 'utf-8');
     const conteudoJSON:IJob[] = JSON.parse(arquivoJSON);
     return conteudoJSON;
 }
 
+/**
+ * Faz a escrita no arquivo "banco de dados" do tipo .json
+ * @param conteudoJSON vetor de objetos tipo IJob
+ */
 function writingInJson(conteudoJSON:IJob[]){
     fs.writeFileSync(URLARQUIVOJSON, JSON.stringify(conteudoJSON, null, 4));
 }
 
+/**
+ * A partir do indice recebido faz a alteração de data e hora das ultimas alterações e chama a função de escrita
+ * @param id indice
+ * @param conteudoJSON vetor de objetos IJob
+ */
 function attAlterDateTime(id: number, conteudoJSON:IJob[]){
     const indexId = conteudoJSON.findIndex((item) => item.id_job == id );
 
@@ -23,6 +36,11 @@ function attAlterDateTime(id: number, conteudoJSON:IJob[]){
     writingInJson(conteudoJSON);
 }
 
+/**
+ * Faz a criação e inserção do objeto no vetor de objetos do tipo IJob
+ * @param dados objeto recebido a ser criado
+ * @returns verdadeiro se criado
+ */
 export function createJob(dados: IJob){
     const conteudoJSON = readingJson();
 
@@ -36,10 +54,19 @@ export function createJob(dados: IJob){
     return true;
 }
 
+/**
+ * função para retornar todo o "banco de dados"
+ * @returns todos os objetos contidos no db.json
+ */
 export function findAll(){
     return readingJson();
 }
 
+/**
+ * Função que retorna objeto buscado por indice
+ * @param id indice a ser procurado
+ * @returns retorna objeto, elemento inteiro buscado ou undefined caso nao exista
+ */
 export function findById(id: number){
     try{
         const conteudoJSON = readingJson();
@@ -50,20 +77,35 @@ export function findById(id: number){
     }
 }
 
+/**
+ * altera activeStatus para false, tornando o objeto "inativo", como se fosse deletado
+ * NÃO ACABADA - DEVERÁ SER TODA MODIFICADA
+ * @param id indice a ser deletado - movido para INATIVOS
+ * @returns string de instrucoes caso encontrado ou nao
+ */
 export function deleteById(id: number){
     const conteudoJSON = readingJson();
     const indexId = conteudoJSON.findIndex((item) => item.id_job == id );
 
+    
+
     if(indexId != -1) {
         conteudoJSON[indexId].activeStatus = false;
     }else{
-        return "Elemento não encontrado!";
+        return {message: "Elemento não encontrado!"};
     }
 
     attAlterDateTime(id, conteudoJSON);
-    return "Elemento alterado para inativo";
+    return {message: "Elemento alterado para inativo"};
 }
 
+
+/**
+ * FUNÇÃO QUE POSSIVELMENTE VAI PARA O FRONT END A PARTIR DE TODOS OS OBJETOS JÁ BUSCADOS E LISTADOS
+ * @param tipoDeBusca 
+ * @param valorDeBusca 
+ * @returns 
+ */
 export function findBySearch(tipoDeBusca: string, valorDeBusca:string){
     const conteudoJSON = readingJson();
     const regex = new RegExp(valorDeBusca, "ig");
@@ -88,6 +130,13 @@ export function findBySearch(tipoDeBusca: string, valorDeBusca:string){
     })
 }
 
+
+/**
+ * função que faz a alteração por completo do objeto do indice
+ * @param id indice do elemento
+ * @param dados elemento enviado com as alteraçoes
+ * @returns true se deu certo
+ */
 export function alteraJob(id: number, dados: IJob){
     try{
         const conteudoJSON = readingJson();

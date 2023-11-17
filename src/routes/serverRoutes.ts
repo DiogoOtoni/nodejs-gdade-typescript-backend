@@ -19,6 +19,6 @@ router.get("/jobs/searchjobs", searchJobs);
 router.get("/jobs/:id", findJobById);
 router.patch("/jobs/:id", alteraCompleteJob);
 
-router.patch("/jobs/del/:id", deleteMoveToInactive);
+router.delete("/jobs/:id", deleteMoveToInactive);
 
 export { router };
